@@ -1,10 +1,14 @@
 package com.product.util;
 
+import com.product.dto.VendorRequest;
 import com.product.exception.ProductServiceException;
 import com.product.dto.ProductRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -26,4 +30,18 @@ public class ProductServiceUtils {
             throw new ProductServiceException("Product rate must be greater than zero", HttpStatus.BAD_REQUEST);
         }
     }
+
+    public void validateNoDuplicateVendors(List<VendorRequest> vendors) {
+        boolean hasDuplicates = vendors.stream()
+                .map(VendorRequest::getVendorName)
+                .collect(Collectors.groupingBy(v -> v, Collectors.counting()))
+                .values()
+                .stream()
+                .anyMatch(count -> count > 1);
+
+        if (hasDuplicates) {
+            throw new IllegalArgumentException("Duplicate vendors are not allowed");
+        }
+    }
+
 }

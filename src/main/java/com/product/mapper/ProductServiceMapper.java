@@ -53,4 +53,27 @@ public class ProductServiceMapper {
         response.setVendors(vendorResponses);
         return response;
     }
+
+    private VendorResponse mapVendorToResponse(VendorSchema vendor) {
+        VendorResponse vr = new VendorResponse();
+        vr.setVendorId(vendor.getVendorId());
+        vr.setVendorName(vendor.getVendorName());
+        return vr;
+    }
+
+    public ProductResponse mapToResponses(ProductSchema product) {
+        ProductResponse response = new ProductResponse();
+        response.setProdId(product.getProdId());
+        response.setProdName(product.getProdName());
+        response.setProdRate(product.getProdRate());
+
+        List<VendorResponse> vendorResponses = product.getVendors()
+                .stream()
+                .map(this::mapVendorToResponse)  // method reference usage
+                .collect(Collectors.toList());
+
+        response.setVendors(vendorResponses);
+        return response;
+    }
+
 }

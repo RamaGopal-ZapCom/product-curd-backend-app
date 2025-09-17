@@ -54,13 +54,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ApiResponse<ProductResponse> getProductById(Integer id) {
-        ProductSchema product = productRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(ProductServiceConstants.PRODUCT_NOT_FOUND+ "  "+ id));
-
-        return new ApiResponse<>(true,
-                productServiceMapper.mapToResponse(product),
-                ProductServiceConstants.PRODUCT_FETCHED_SUCCESS, null);
+        return productRepository.findById(id)
+                .map(product -> new ApiResponse<>(true,
+                        productServiceMapper.mapToResponse(product),
+                        ProductServiceConstants.PRODUCT_FETCHED_SUCCESS, null))
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ProductServiceConstants.PRODUCT_NOT_FOUND + " " + id));
     }
 
     @Override
