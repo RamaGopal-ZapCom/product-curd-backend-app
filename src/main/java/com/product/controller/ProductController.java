@@ -7,6 +7,7 @@ import com.product.entiity.Product;
 import com.product.repository.ProductRepository;
 import com.product.repository.ProductServiceRepository;
 import com.product.service.ProductService;
+import com.product.service.impl.ProductAnalyticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,8 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private ProductServiceRepository repository;
+    @Autowired
+    private ProductAnalyticsService analyticsService;
 
     @PostMapping("/createProduct")
     @Validated
@@ -193,4 +196,20 @@ public class ProductController {
         repository.deleteById(id);
         return "Product deleted successfully!";
     }
+
+    @GetMapping("/analytics/avg-price-category")
+    public Map<String, Double> getAvgPriceByCategory() {
+        return analyticsService.averagePriceByCategory();
+    }
+
+    @GetMapping("/analytics/category-wise-products")
+    public Map<String, Map<Integer, String>> getCategoryWiseProducts() {
+        return analyticsService.categoryWiseProductMap();
+    }
+
+    @GetMapping("/analytics/product-attributes")
+    public List<Map<String, Object>> getProductAttributes() {
+        return analyticsService.buildProductAttributes();
+    }
+
 }
