@@ -52,4 +52,23 @@ public class JwtUtil {
         return (String) Jwts.parser().setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token).getBody().get("role");
     }
+
+    public String refreshToken(String token) {
+        // Extract username and claims from the old token
+        String username = extractUsername(token);
+        String role = extractRole(token);
+
+        // Generate a new token with fresh expiration
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+    }
+
 }

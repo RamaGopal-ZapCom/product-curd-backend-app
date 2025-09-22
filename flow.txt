@@ -1,0 +1,254 @@
+1. User Registration
+
+Scenario: A new user signs up. Default role is ROLE_USER.
+
+Endpoint:
+
+POST /api/auth/register
+
+
+Request Body:
+
+{
+  "username": "john",
+  "password": "password123"
+}
+
+
+Response:
+
+{
+  "success": true,
+  "message": "User registered successfully"
+}
+
+
+Notes:
+
+Role is never provided by user in request.
+
+Admin cannot be created via this endpoint.
+
+2. Login
+
+Scenario: User logs in to get a JWT token.
+
+Endpoint:
+
+POST /api/auth/login
+
+
+Request Body:
+
+{
+  "username": "john",
+  "password": "password123"
+}
+
+
+Response:
+
+{
+  "success": true,
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsIn..."
+  },
+  "message": "Login successful"
+}
+
+
+Notes:
+
+JWT token includes the user’s role (ROLE_USER or ROLE_ADMIN).
+
+3. Logout
+
+Scenario: User logs out. The token is blacklisted.
+
+Endpoint:
+
+POST /api/auth/logout
+
+
+Headers:
+
+Authorization: Bearer <token>
+
+
+Response:
+
+{
+  "success": true,
+  "message": "Logged out successfully"
+}
+
+
+Notes:
+
+Token must be provided.
+
+Token is stored in blacklist for security.
+
+4. Refresh Token
+
+Scenario: User token is about to expire; they want a new token without logging in again.
+
+Endpoint:
+
+POST /api/auth/refresh
+
+
+Headers:
+
+Authorization: Bearer <token>
+
+
+Response:
+
+{
+  "success": true,
+  "data": "new-jwt-token",
+  "message": "Token refreshed successfully"
+}
+
+
+Notes:
+
+Only valid, non-blacklisted tokens can be refreshed.
+
+5. Change Password
+
+Scenario: Logged-in user wants to change password.
+
+Endpoint:
+
+POST /api/auth/change-password
+
+
+Headers:
+
+Authorization: Bearer <token>
+
+
+Request Body:
+
+{
+  "oldPassword": "password123",
+  "newPassword": "newPassword456"
+}
+
+
+Response:
+
+{
+  "success": true,
+  "message": "Password changed successfully"
+}
+
+
+Notes:
+
+Requires current authentication (token).
+
+Does not need a reset token.
+
+6. Reset Password (Forgot Password)
+
+Scenario: User forgot password; system sends a reset token via email.
+
+Endpoint:
+
+POST /api/auth/reset-password
+
+
+Request Body:
+
+{
+  "email": "john@example.com",
+  "token": "reset-token-from-email",
+  "newPassword": "newPassword456"
+}
+
+
+Response:
+
+{
+  "success": true,
+  "message": "Password reset successfully"
+}
+
+
+Notes:
+
+Uses temporary token stored in memory/db.
+
+Token expires after a certain time.
+
+7. Get Current User Info
+
+Scenario: Fetch logged-in user info.
+
+Endpoint:
+
+GET /api/auth/me
+
+
+Headers:
+
+Authorization: Bearer <token>
+
+
+Response:
+
+{
+  "success": true,
+  "data": {
+    "username": "john",
+    "role": "ROLE_USER"
+  },
+  "message": "User info fetched"
+}
+
+8. Admin: Assign Role (Optional)
+
+Scenario: Only admins can assign roles to other users.
+
+Endpoint:
+
+POST /api/admin/assign-role
+
+
+Headers:
+
+Authorization: Bearer <admin-token>
+
+
+Request Body:
+
+{
+  "username": "jane",
+  "role": "ROLE_ADMIN"
+}
+
+
+Response:
+
+{
+  "success": true,
+  "message": "Role assigned successfully"
+}
+
+
+Notes:
+
+Enforce ROLE_ADMIN check in controller.
+
+Regular users cannot call this endpoint.
+
+9. Token Blacklist / Security
+
+Store blacklisted tokens in memory or DB.
+
+Check blacklist in JWT filter.
+
+Expired or blacklisted tokens should return 401 Unauthorized.

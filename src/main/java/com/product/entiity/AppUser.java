@@ -1,5 +1,6 @@
 package com.product.entiity;
 
+import com.product.constants.UserRole;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +25,6 @@ public class AppUser {
     private Long id;
     private String username;
     private String password;
-    private String role; // e.g., "ROLE_ADMIN" or "ROLE_USER"
+    private String role;
 
 }
