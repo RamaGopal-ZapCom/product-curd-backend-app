@@ -1,6 +1,7 @@
 package com.product.config;
 
 
+import com.product.constants.ApiPaths;
 import com.product.filter.JwtRequestFilter;
 import com.product.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,11 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll() // <--- changed here
+                // TODO All endpoint bypass security inside Auth-controller
+                //.antMatchers("/api/auth/**").permitAll()
+                // TODO Here Mentioned endpoint bypass the security inside Auth-controller
+                //.antMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                .antMatchers(ApiPaths.REGISTER, ApiPaths.LOGIN).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
