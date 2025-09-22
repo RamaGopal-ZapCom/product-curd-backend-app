@@ -1,5 +1,6 @@
 package com.product.advice;
 
+import com.product.exception.CustomAuthenticationException;
 import com.product.exception.ResourceNotFoundException;
 import com.product.dto.response.ApiResponse;
 import org.springframework.http.HttpStatus;
@@ -53,5 +54,15 @@ public class ProductServiceExceptionAdvice {
                 null, ex.getMessage(),
                 null);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+    @ExceptionHandler(CustomAuthenticationException.class)
+    public ResponseEntity<ApiResponse<Object>> handleAuthException(CustomAuthenticationException ex) {
+        ApiResponse<Object> response = new ApiResponse<>();
+        response.setSuccess(false);
+        response.setMessage(ex.getMessage());
+        response.setData(null);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 }
