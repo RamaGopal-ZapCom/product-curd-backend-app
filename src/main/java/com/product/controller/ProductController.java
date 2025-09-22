@@ -91,7 +91,7 @@ public class ProductController {
     }
 
 
-    // ================= Create Product =================
+
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
         // Check for duplicate SKU using Java 8
@@ -105,13 +105,13 @@ public class ProductController {
         return repository.save(product);
     }
 
-    // ================= Read All Products =================
+
     @GetMapping
     public List<Product> getAllProductss() {
         return repository.findAll();
     }
 
-    // ================= Get Products Sorted by Price (Desc) =================
+
     @GetMapping("/sorted/price")
     public List<Product> getProductsSortedByPriceDesc() {
         return repository.findAll()
@@ -120,7 +120,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    // ================= Top 3 Rated Products =================
+
     @GetMapping("/top-rated")
     public List<Product> getTopRatedProducts() {
         return repository.findAll()
@@ -130,7 +130,6 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    // ================= Products Filtered by Stock =================
     @GetMapping("/in-stock")
     public List<Product> getAvailableProducts() {
         return repository.findAll().stream()
@@ -138,7 +137,6 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    // ================= Most Expensive and Cheapest Products =================
     @GetMapping("/price-extremes")
     public Map<String, Product> getPriceExtremes() {
         List<Product> products = repository.findAll();
@@ -154,7 +152,6 @@ public class ProductController {
         return map;
     }
 
-    // ================= Find Duplicate Product Names =================
     @GetMapping("/duplicates")
     public Set<String> getDuplicateProductNames() {
         Set<String> unique = new HashSet<>();
@@ -165,7 +162,6 @@ public class ProductController {
                 .collect(Collectors.toSet());
     }
 
-    // ================= Get All Tags as Single String =================
     @GetMapping("/tags")
     public String getAllTags() {
         return repository.findAll()
@@ -175,7 +171,6 @@ public class ProductController {
                 .collect(Collectors.joining(", ", "[", "]"));
     }
 
-    // ================= Average Rating of Products =================
     @GetMapping("/average-rating")
     public double getAverageRating() {
         return repository.findAll().stream()
@@ -184,13 +179,11 @@ public class ProductController {
                 .orElse(0);
     }
 
-    // ================= Search Products by Name Containing Keyword =================
     @GetMapping("/search")
     public List<Product> searchProducts(@RequestParam String keyword) {
         return repository.findByNameContaining(keyword);
     }
 
-    // ================= Delete Product =================
     @DeleteMapping("/{id}")
     public String deleteProduct(@PathVariable Long id) {
         repository.deleteById(id);
