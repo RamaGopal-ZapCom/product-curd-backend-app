@@ -8,7 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 /**
  * Created by Rama Gopal
@@ -26,5 +28,11 @@ public class AppUser {
     private String username;
     private String password;
     private String role;
+    private LocalDateTime lastPasswordUpdatedAt;
+
+    @PrePersist
+    public void onCreate() {
+        this.lastPasswordUpdatedAt = LocalDateTime.now();
+    }
 
 }

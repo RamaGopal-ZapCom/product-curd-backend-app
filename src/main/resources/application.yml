@@ -11,6 +11,10 @@ spring:
 
 application-name: product-service
 
+security:
+  password:
+    expiry-minutes: 10
+
 
   # For dev
   # mvn spring-boot:run -Dspring-boot.run.profiles=dev
