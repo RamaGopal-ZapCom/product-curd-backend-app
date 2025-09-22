@@ -47,6 +47,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String register(AuthRequest request) {
+
+        // Check if user already exists
+        if (userRepository.existsByUsername(request.getUsername())) {
+            return "User is already registered with this email";
+        }
         AppUser user = new AppUser();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));

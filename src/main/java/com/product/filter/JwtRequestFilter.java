@@ -1,5 +1,6 @@
 package com.product.filter;
 
+import com.product.constants.ApiPaths;
 import com.product.exception.CustomAuthenticationException;
 import com.product.service.TokenBlacklistService;
 import com.product.util.JwtUtil;
@@ -48,7 +49,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             String path = request.getRequestURI();
 
             // Skip JWT check only for truly public endpoints
-            if (path.equals("/api/auth/login") || path.equals("/api/auth/register")) {
+            if (path.equals(ApiPaths.LOGIN) || path.equals(ApiPaths.REGISTER)) {
                 filterChain.doFilter(request, response);
                 return;
             }
