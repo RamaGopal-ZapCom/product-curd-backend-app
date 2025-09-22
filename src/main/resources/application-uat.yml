@@ -1,5 +1,6 @@
 spring:
-  profiles: uat
+  profiles:
+    active: uat
 
 logging:
   level:

@@ -1,6 +1,6 @@
-
 spring:
-  profiles: uat
+  profiles:
+    active: prod
 
 logging:
   level:
