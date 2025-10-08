@@ -37,6 +37,13 @@ import org.springframework.context.annotation.Configuration;
  *
  * | 4    | Run Spring Boot app with the key `                                      |
  *
+ *    #password encryptor
+ * jasypt:
+ *   encryptor:
+ *     algorithm: PBEWithMD5AndDES
+ *     password: secretkey
+ *
+ *# for testing below
  *      public class TestJspy {
  *     public static void main(String[] args) {
  *         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
